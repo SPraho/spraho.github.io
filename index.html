@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Praho — Game Artist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f5f2ed;
+      --ink: #1a1814;
+      --muted: #8a8478;
+      --accent: #c4673a;
+      --border: #d9d4cb;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 4rem;
+      background: rgba(245,242,237,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--ink); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      gap: 4rem;
+      max-width: 1300px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-left { opacity: 0; animation: fadeUp 0.9s 0.2s forwards; }
+
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(4rem, 8vw, 7rem);
+      line-height: 0.9;
+      margin-bottom: 2rem;
+    }
+
+    .hero-name em { font-style: italic; color: var(--accent); }
+
+    .hero-desc {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 380px;
+      border-left: 2px solid var(--border);
+      padding-left: 1.5rem;
+    }
+
+    .hero-right {
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
+      align-self: end;
+      padding-bottom: 6rem;
+    }
+
+    .hero-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 3rem; left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 1.2s forwards;
+    }
+
+    .hero-scroll::before, .hero-scroll::after {
+      content: '';
+      display: block;
+      width: 40px; height: 1px;
+      background: var(--border);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%; height: 1px;
+      background: var(--border);
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* SECTION WRAPPER */
+    .section-wrap {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 7rem 4rem;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .section-label span {
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: var(--border);
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .about-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      line-height: 1.2;
+      margin-bottom: 2rem;
+    }
+
+    .about-heading em { font-style: italic; color: var(--accent); }
+
+    .about-body {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 2;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-row:first-child { border-top: 1px solid var(--border); }
+
+    .info-key {
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .info-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+    }
+
+    /* PROJECTS GRID */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    /* Make first 2 cards wider (span 2 cols) for visual rhythm */
+    .project-card:nth-child(1),
+    .project-card:nth-child(2) {
+      grid-column: span 2;
+    }
+
+    .project-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+
+    /* THUMBNAIL */
+    .card-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: var(--border);
+      position: relative;
+    }
+
+    .card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .project-card:hover .card-thumb img {
+      transform: scale(1.04);
+    }
+
+    /* Placeholder shown when no image yet */
+    .card-thumb .placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--bg);
+    }
+
+    .placeholder-icon {
+      width: 36px; height: 36px;
+      border: 1px dashed var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--border);
+      font-size: 1.1rem;
+    }
+
+    .placeholder-text {
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--border);
+    }
+
+    /* CARD BODY */
+    .card-body { padding: 1.2rem 1.4rem 1.4rem; }
+
+    .card-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.35rem;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* CONTACT */
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: end;
+    }
+
+    .contact-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      line-height: 1.2;
+    }
+
+    .contact-heading em { font-style: italic; color: var(--accent); }
+
+    .contact-right { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .contact-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--ink);
+      width: fit-content;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .contact-link:hover { color: var(--accent); border-color: var(--accent); }
+    .contact-link::after { content: '→'; transition: transform 0.2s; }
+    .contact-link:hover::after { transform: translateX(4px); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .footer-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .footer-copy {
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+      .project-card:nth-child(1),
+      .project-card:nth-child(2) { grid-column: span 1; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      #hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 5rem; gap: 3rem; }
+      .hero-right { padding-bottom: 0; }
+      .section-wrap { padding: 5rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+
+    @media (max-width: 500px) {
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">Praho</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Game Artist</p>
+      <h1 class="hero-name">Pra<em>ho</em></h1>
+      <p class="hero-desc">Creating visuals that shape the worlds players explore and the stories they remember.</p>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat">
+        <span class="hero-stat-label">Discipline</span>
+        <span class="hero-stat-value">Game Art</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-label">Status</span>
+        <span class="hero-stat-value">Available for work</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-label">Based in</span>
+        <span class="hero-stat-value">Indonesia</span>
+      </div>
+    </div>
+    <div class="hero-scroll">scroll to explore</div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ABOUT -->
+  <div class="section-wrap" id="about">
+    <div class="section-label"><span>About</span></div>
+    <div class="about-grid">
+      <div>
+        <h2 class="about-heading">Art that lives<br>inside <em>worlds.</em></h2>
+        <p class="about-body">I'm Praho, a game artist passionate about crafting visuals that don't just look good — they feel alive. From concept to final asset, I bring a considered eye to every piece of work.</p>
+      </div>
+      <div>
+        <div class="info-row">
+          <span class="info-key">Name</span>
+          <span class="info-val">Praho</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Role</span>
+          <span class="info-val">Game Artist</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Availability</span>
+          <span class="info-val">Open to projects</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Contact</span>
+          <span class="info-val">spraho@outlook.com</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PROJECTS -->
+  <div class="section-wrap" id="projects">
+    <div class="section-label"><span>Selected Work</span></div>
+    <div class="projects-grid">
+
+      <!-- To add an image: replace the placeholder div inside .card-thumb with:
+           <img src="images/your-image.jpg" alt="Project title" />  -->
+
+      <div class="project-card">
+        <div class="card-thumb">
+          <div class="placeholder">
+            <div class="placeholder-icon">+</div>
+            <span class="placeholder-text">Add image</span>
+          </div>
+          <!-- <img src="images/project1.jpg" alt="Project 1" /> -->
+        </div>
+        <div class="card-body">
+          <div class="card-num">01</div>
+          <div class="card-title">Project Title</div>
+          <p class="card-desc">Short description of the project.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-thumb">
+          <div class="placeholder">
+            <div class="placeholder-icon">+</div>
+            <span class="placeholder-text">Add image</span>
+          </div>
+          <!-- <img src="images/project2.jpg" alt="Project 2" /> -->
+        </div>
+        <div class="card-body">
+          <div class="card-num">02</div>
+          <div class="card-title">Project Title</div>
+          <p class="card-desc">Short description of the project.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-thumb">
+          <div class="placeholder">
+            <div class="placeholder-icon">+</div>
+            <span class="placeholder-text">Add image</span>
+          </div>
+          <!-- <img src="images/project3.jpg" alt="Project 3" /> -->
+        </div>
+        <div class="card-body">
+          <div class="card-num">03</div>
+          <div class="card-title">Project Title</div>
+          <p class="card-desc">Short description of the project.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-thumb">
+          <div class="placeholder">
+            <div class="placeholder-icon">+</div>
+            <span class="placeholder-text">Add image</span>
+          </div>
+          <!-- <img src="images/project4.jpg" alt="Project 4" /> -->
+        </div>
+        <div class="card-body">
+          <div class="card-num">04</div>
+          <div class="card-title">Project Title</div>
+          <p class="card-desc">Short description of the project.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-thumb">
+          <div class="placeholder">
+            <div class="placeholder-icon">+</div>
+            <span class="placeholder-text">Add image</span>
+          </div>
+          <!-- <img src="images/project5.jpg" alt="Project 5" /> -->
+        </div>
+        <div class="card-body">
+          <div class="card-num">05</div>
+          <div class="card-title">Project Title</div>
+          <p class="card-desc">Short description of the project.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-thumb">
+          <div class="placeholder">
+            <div class="placeholder-icon">+</div>
+            <span class="placeholder-text">Add image</span>
+          </div>
+          <!-- <img src="images/project6.jpg" alt="Project 6" /> -->
+        </div>
+        <div class="card-body">
+          <div class="card-num">06</div>
+          <div class="card-title">Project Title</div>
+          <p class="card-desc">Short description of the project.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-thumb">
+          <div class="placeholder">
+            <div class="placeholder-icon">+</div>
+            <span class="placeholder-text">Add image</span>
+          </div>
+          <!-- <img src="images/project7.jpg" alt="Project 7" /> -->
+        </div>
+        <div class="card-body">
+          <div class="card-num">07</div>
+          <div class="card-title">Project Title</div>
+          <p class="card-desc">Short description of the project.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-thumb">
+          <div class="placeholder">
+            <div class="placeholder-icon">+</div>
+            <span class="placeholder-text">Add image</span>
+          </div>
+          <!-- <img src="images/project8.jpg" alt="Project 8" /> -->
+        </div>
+        <div class="card-body">
+          <div class="card-num">08</div>
+          <div class="card-title">Project Title</div>
+          <p class="card-desc">Short description of the project.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-thumb">
+          <div class="placeholder">
+            <div class="placeholder-icon">+</div>
+            <span class="placeholder-text">Add image</span>
+          </div>
+          <!-- <img src="images/project9.jpg" alt="Project 9" /> -->
+        </div>
+        <div class="card-body">
+          <div class="card-num">09</div>
+          <div class="card-title">Project Title</div>
+          <p class="card-desc">Short description of the project.</p>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-thumb">
+          <div class="placeholder">
+            <div class="placeholder-icon">+</div>
+            <span class="placeholder-text">Add image</span>
+          </div>
+          <!-- <img src="images/project10.jpg" alt="Project 10" /> -->
+        </div>
+        <div class="card-body">
+          <div class="card-num">10</div>
+          <div class="card-title">Project Title</div>
+          <p class="card-desc">Short description of the project.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <div class="section-wrap" id="contact">
+    <div class="section-label"><span>Contact</span></div>
+    <div class="contact-wrap">
+      <h2 class="contact-heading">Let's make<br>something <em>great.</em></h2>
+      <div class="contact-right">
+        <p class="contact-sub">Open for commissions, collaborations, and full-time opportunities. Don't hesitate to reach out.</p>
+        <a class="contact-link" href="mailto:spraho@outlook.com">spraho@outlook.com</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-name">Praho</span>
+    <span class="footer-copy">© 2025 — All rights reserved</span>
+  </footer>
+
+</body>
+</html>
