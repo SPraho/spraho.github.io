@@ -4,29 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Praho — Game Artist</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #f5f2ed;
-      --ink: #1a1814;
-      --muted: #8a8478;
-      --accent: #c4673a;
-      --border: #d9d4cb;
+      --dark:   #264653;
+      --teal:   #2A9D8F;
+      --yellow: #E9C46A;
+      --orange: #F4A261;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      min-height: 100vh;
+      background: #f2ede8;
+      color: var(--dark);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 400;
       overflow-x: hidden;
     }
 
-    /* NAV */
+    /* Grain texture */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 900;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── NAV ── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -34,122 +42,177 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem 4rem;
-      background: rgba(245,242,237,0.88);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
+      padding: 1rem 3.5rem;
+      background: var(--dark);
+      border-bottom: 4px solid var(--yellow);
     }
 
     .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600;
-      font-size: 1.2rem;
-      letter-spacing: 4px;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #f2ede8;
+      letter-spacing: 3px;
       text-transform: uppercase;
     }
+
+    .nav-logo span { color: var(--yellow); }
 
     .nav-links { display: flex; gap: 2.5rem; list-style: none; }
 
     .nav-links a {
-      color: var(--muted);
+      color: rgba(242,237,232,0.55);
       text-decoration: none;
-      font-size: 0.75rem;
-      letter-spacing: 2px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 3px;
       text-transform: uppercase;
       transition: color 0.2s;
     }
 
-    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover { color: var(--yellow); }
 
-    /* HERO */
+    /* ── HERO ── */
     #hero {
       min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      padding: 8rem 4rem 4rem;
-      gap: 4rem;
-      max-width: 1300px;
-      margin: 0 auto;
+      background: var(--dark);
+      display: flex;
+      align-items: stretch;
       position: relative;
+      overflow: hidden;
     }
 
-    .hero-left { opacity: 0; animation: fadeUp 0.9s 0.2s forwards; }
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(233,196,106,0.1) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
 
-    .hero-eyebrow {
-      font-size: 0.7rem;
+    .hero-inner {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 10rem 3.5rem 5rem;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-left { opacity: 0; animation: fadeUp 0.8s 0.15s forwards; }
+
+    .hero-stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: 2px solid var(--teal);
+      color: var(--teal);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
       letter-spacing: 4px;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(4rem, 8vw, 7rem);
-      line-height: 0.9;
+      padding: 0.35rem 1rem;
       margin-bottom: 2rem;
     }
 
-    .hero-name em { font-style: italic; color: var(--accent); }
+    .hero-stamp::before, .hero-stamp::after { content: '★'; font-size: 0.55rem; }
+
+    .hero-heading {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      line-height: 0.95;
+      color: #f2ede8;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-heading .c-yellow { color: var(--yellow); }
+    .hero-heading .c-outline {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--teal);
+    }
+
+    .hero-subheading {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      color: var(--orange);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
 
     .hero-desc {
-      font-size: 0.95rem;
-      color: var(--muted);
-      line-height: 1.9;
-      max-width: 380px;
-      border-left: 2px solid var(--border);
-      padding-left: 1.5rem;
+      font-size: 1rem;
+      color: rgba(242,237,232,0.6);
+      line-height: 1.85;
+      max-width: 400px;
     }
+
+    .hero-cta {
+      margin-top: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.55s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--yellow);
+      color: var(--dark);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 2rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { background: var(--orange); transform: translateY(-2px); }
+    .btn-primary::after { content: '→'; }
 
     .hero-right {
       opacity: 0;
-      animation: fadeUp 0.9s 0.5s forwards;
-      align-self: end;
-      padding-bottom: 6rem;
+      animation: fadeUp 0.8s 0.35s forwards;
+      border: 2px solid rgba(242,237,232,0.12);
     }
 
     .hero-stat {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--border);
+      align-items: center;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid rgba(242,237,232,0.08);
     }
 
+    .hero-stat:last-child { border-bottom: none; }
+
     .hero-stat-label {
-      font-size: 0.65rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--muted);
+      color: rgba(242,237,232,0.35);
     }
 
     .hero-stat-value {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-    }
-
-    .hero-scroll {
-      position: absolute;
-      bottom: 3rem; left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.65rem;
-      letter-spacing: 3px;
-      color: var(--muted);
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      opacity: 0;
-      animation: fadeUp 0.9s 1.2s forwards;
-    }
-
-    .hero-scroll::before, .hero-scroll::after {
-      content: '';
-      display: block;
-      width: 40px; height: 1px;
-      background: var(--border);
+      font-family: 'Oswald', sans-serif;
+      font-weight: 400;
+      font-size: 1rem;
+      color: #f2ede8;
+      letter-spacing: 1px;
     }
 
     @keyframes fadeUp {
@@ -157,261 +220,325 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* DIVIDER */
-    .divider {
-      width: 100%; height: 1px;
-      background: var(--border);
-      max-width: 1300px;
-      margin: 0 auto;
-    }
-
-    /* SECTION WRAPPER */
-    .section-wrap {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 7rem 4rem;
-    }
-
-    .section-label {
+    /* ── TICKER BAND ── */
+    .band {
+      background: var(--teal);
+      padding: 0.65rem 0;
       display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 4rem;
+      justify-content: center;
+      gap: 3rem;
+      overflow: hidden;
     }
 
-    .section-label span {
-      font-size: 0.65rem;
+    .band-item {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
       letter-spacing: 4px;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #f2ede8;
       white-space: nowrap;
     }
 
-    .section-label::after {
-      content: '';
-      flex: 1; height: 1px;
-      background: var(--border);
+    .band-item::before { content: '✦ '; opacity: 0.6; }
+
+    /* ── SECTIONS ── */
+    .section-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 6rem 3.5rem;
     }
 
-    /* ABOUT */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      white-space: nowrap;
+    }
+
+    .section-rule {
+      flex: 1; height: 2px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--dark) 0, var(--dark) 6px,
+        transparent 6px, transparent 12px
+      );
+      opacity: 0.15;
+    }
+
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--dark);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
     .about-grid {
       display: grid;
       grid-template-columns: 1.2fr 1fr;
-      gap: 6rem;
+      gap: 5rem;
       align-items: start;
     }
 
-    .about-heading {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(2.5rem, 4vw, 3.5rem);
-      line-height: 1.2;
-      margin-bottom: 2rem;
+    .about-text {
+      font-size: 1rem;
+      color: var(--dark);
+      line-height: 1.9;
+      opacity: 0.75;
     }
 
-    .about-heading em { font-style: italic; color: var(--accent); }
+    .about-text strong { opacity: 1; font-weight: 600; color: var(--dark); }
 
-    .about-body {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 2;
+    .about-cards {
+      display: flex;
+      flex-direction: column;
+      border: 2px solid var(--dark);
     }
 
-    .info-row {
+    .about-card {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      padding: 1.1rem 0;
-      border-bottom: 1px solid var(--border);
+      align-items: center;
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid rgba(38,70,83,0.15);
     }
 
-    .info-row:first-child { border-top: 1px solid var(--border); }
+    .about-card:last-child { border-bottom: none; }
+    .about-card:nth-child(even) { background: rgba(42,157,143,0.07); }
 
-    .info-key {
-      font-size: 0.65rem;
-      letter-spacing: 2px;
+    .about-card-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--teal);
     }
 
-    .info-val {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
+    .about-card-value {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 400;
+      font-size: 0.95rem;
+      color: var(--dark);
+      letter-spacing: 1px;
     }
 
-    /* PROJECTS GRID */
+    /* ── PROJECTS ── */
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
+      gap: 1.2rem;
     }
 
-    /* Make first 2 cards wider (span 2 cols) for visual rhythm */
     .project-card:nth-child(1),
-    .project-card:nth-child(2) {
-      grid-column: span 2;
-    }
+    .project-card:nth-child(2) { grid-column: span 2; }
 
     .project-card {
       background: #fff;
-      border: 1px solid var(--border);
+      border: 2px solid var(--dark);
       overflow: hidden;
       cursor: pointer;
-      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
     }
 
     .project-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+      transform: translate(-3px, -3px);
+      box-shadow: 5px 5px 0 var(--dark);
     }
 
-    /* THUMBNAIL */
+    .project-card:nth-child(odd)  { border-top: 4px solid var(--orange); }
+    .project-card:nth-child(even) { border-top: 4px solid var(--teal); }
+
     .card-thumb {
       width: 100%;
       aspect-ratio: 16 / 10;
       overflow: hidden;
-      background: var(--border);
+      background: rgba(38,70,83,0.05);
       position: relative;
     }
 
     .card-thumb img {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
       display: block;
       transition: transform 0.5s ease;
     }
 
-    .project-card:hover .card-thumb img {
-      transform: scale(1.04);
-    }
+    .project-card:hover .card-thumb img { transform: scale(1.04); }
 
-    /* Placeholder shown when no image yet */
     .card-thumb .placeholder {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      background: var(--bg);
+      gap: 0.6rem;
     }
 
     .placeholder-icon {
-      width: 36px; height: 36px;
-      border: 1px dashed var(--border);
-      border-radius: 50%;
+      width: 40px; height: 40px;
+      border: 2px dashed rgba(38,70,83,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--border);
+      color: rgba(38,70,83,0.2);
       font-size: 1.1rem;
     }
 
     .placeholder-text {
-      font-size: 0.6rem;
-      letter-spacing: 2px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--border);
+      color: rgba(38,70,83,0.25);
     }
 
-    /* CARD BODY */
-    .card-body { padding: 1.2rem 1.4rem 1.4rem; }
+    .card-body {
+      padding: 1rem 1.2rem 1.3rem;
+      border-top: 2px solid var(--dark);
+    }
 
     .card-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.75rem;
-      font-style: italic;
-      color: var(--muted);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: var(--teal);
       margin-bottom: 0.3rem;
+      text-transform: uppercase;
     }
 
     .card-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: var(--ink);
-      margin-bottom: 0.35rem;
-      line-height: 1.3;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .card-desc {
-      font-size: 0.75rem;
-      color: var(--muted);
+      font-size: 0.8rem;
+      color: rgba(38,70,83,0.55);
       line-height: 1.7;
     }
 
-    /* CONTACT */
-    .contact-wrap {
+    /* ── CONTACT ── */
+    .contact-inner {
+      background: var(--dark);
+      padding: 4rem;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6rem;
-      align-items: end;
+      gap: 5rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-inner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(233,196,106,0.07) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
     }
 
     .contact-heading {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(2.5rem, 4vw, 3.5rem);
-      line-height: 1.2;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: #f2ede8;
+      text-transform: uppercase;
+      line-height: 1.15;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 1;
     }
 
-    .contact-heading em { font-style: italic; color: var(--accent); }
+    .contact-heading em { font-style: normal; color: var(--yellow); }
 
-    .contact-right { display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
 
     .contact-sub {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.9;
+      font-size: 0.95rem;
+      color: rgba(242,237,232,0.5);
+      line-height: 1.85;
     }
 
     .contact-link {
       display: inline-flex;
       align-items: center;
-      gap: 1rem;
-      font-size: 0.8rem;
-      letter-spacing: 2px;
+      gap: 0.8rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--ink);
+      background: var(--yellow);
+      color: var(--dark);
       text-decoration: none;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--ink);
+      padding: 0.9rem 1.8rem;
       width: fit-content;
-      transition: color 0.2s, border-color 0.2s;
+      transition: background 0.2s, transform 0.2s;
     }
 
-    .contact-link:hover { color: var(--accent); border-color: var(--accent); }
-    .contact-link::after { content: '→'; transition: transform 0.2s; }
-    .contact-link:hover::after { transform: translateX(4px); }
+    .contact-link:hover { background: var(--orange); transform: translateY(-2px); }
+    .contact-link::after { content: '→'; }
 
-    /* FOOTER */
+    /* ── FOOTER ── */
     footer {
-      border-top: 1px solid var(--border);
-      padding: 2rem 4rem;
+      background: var(--dark);
+      border-top: 4px solid var(--yellow);
+      padding: 1.5rem 3.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: 1300px;
-      margin: 0 auto;
     }
 
-    .footer-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .footer-copy {
-      font-size: 0.65rem;
-      letter-spacing: 2px;
-      color: var(--muted);
+    .footer-logo {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #f2ede8;
+      letter-spacing: 3px;
       text-transform: uppercase;
     }
 
-    /* MOBILE */
+    .footer-logo span { color: var(--yellow); }
+
+    .footer-copy {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: rgba(242,237,232,0.35);
+      text-transform: uppercase;
+    }
+
+    /* ── MOBILE ── */
     @media (max-width: 900px) {
       .projects-grid { grid-template-columns: repeat(2, 1fr); }
       .project-card:nth-child(1),
@@ -419,14 +546,14 @@
     }
 
     @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
-      .nav-links { gap: 1.5rem; }
-      #hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 5rem; gap: 3rem; }
-      .hero-right { padding-bottom: 0; }
-      .section-wrap { padding: 5rem 1.5rem; }
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      .hero-inner { grid-template-columns: 1fr; padding: 8rem 1.5rem 4rem; gap: 3rem; }
+      .section-wrap { padding: 4rem 1.5rem; }
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-      .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-inner { grid-template-columns: 1fr; padding: 2.5rem; gap: 2.5rem; }
       footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+      .band { gap: 1.5rem; }
     }
 
     @media (max-width: 500px) {
@@ -437,7 +564,7 @@
 <body>
 
   <nav>
-    <div class="nav-logo">Praho</div>
+    <div class="nav-logo">Pra<span>ho</span></div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#projects">Work</a></li>
@@ -445,240 +572,258 @@
     </ul>
   </nav>
 
-  <!-- HERO -->
   <section id="hero">
-    <div class="hero-left">
-      <p class="hero-eyebrow">Game Artist</p>
-      <h1 class="hero-name">Pra<em>ho</em></h1>
-      <p class="hero-desc">Creating visuals that shape the worlds players explore and the stories they remember.</p>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-stamp">Game Artist</div>
+        <h1 class="hero-heading">
+          <span class="c-yellow">Hi,</span><br>
+          I'm<br>
+          <span class="c-outline">Praho</span>
+        </h1>
+        <p class="hero-subheading">— Crafting worlds in pixels</p>
+        <p class="hero-desc">I create art for games — characters, environments, and everything in between. Always looking for interesting projects to work on.</p>
+        <div class="hero-cta">
+          <a class="btn-primary" href="#projects">View my work</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat">
+          <span class="hero-stat-label">Discipline</span>
+          <span class="hero-stat-value">Game Art</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-label">Availability</span>
+          <span class="hero-stat-value">Open for work</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-label">Specialty</span>
+          <span class="hero-stat-value">2D / Concept</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-label">Contact</span>
+          <span class="hero-stat-value" style="font-size:0.85rem">spraho@outlook.com</span>
+        </div>
+      </div>
     </div>
-    <div class="hero-right">
-      <div class="hero-stat">
-        <span class="hero-stat-label">Discipline</span>
-        <span class="hero-stat-value">Game Art</span>
-      </div>
-      <div class="hero-stat">
-        <span class="hero-stat-label">Status</span>
-        <span class="hero-stat-value">Available for work</span>
-      </div>
-      <div class="hero-stat">
-        <span class="hero-stat-label">Based in</span>
-        <span class="hero-stat-value">Indonesia</span>
-      </div>
-    </div>
-    <div class="hero-scroll">scroll to explore</div>
   </section>
 
-  <div class="divider"></div>
+  <div class="band">
+    <span class="band-item">Game Artist</span>
+    <span class="band-item">Character Design</span>
+    <span class="band-item">Environment Art</span>
+    <span class="band-item">2D Illustration</span>
+    <span class="band-item">Concept Art</span>
+    <span class="band-item">Open for Work</span>
+  </div>
 
-  <!-- ABOUT -->
   <div class="section-wrap" id="about">
-    <div class="section-label"><span>About</span></div>
+    <div class="section-header">
+      <span class="section-label">01 — About</span>
+      <div class="section-rule"></div>
+    </div>
+    <h2 class="section-title">Who I am</h2>
     <div class="about-grid">
-      <div>
-        <h2 class="about-heading">Art that lives<br>inside <em>worlds.</em></h2>
-        <p class="about-body">I'm Praho, a game artist passionate about crafting visuals that don't just look good — they feel alive. From concept to final asset, I bring a considered eye to every piece of work.</p>
-      </div>
-      <div>
-        <div class="info-row">
-          <span class="info-key">Name</span>
-          <span class="info-val">Praho</span>
+      <p class="about-text">
+        I'm <strong>Praho</strong>, a game artist who loves building the visual side of games. Whether it's a character that players fall in love with or a world they want to keep exploring, I care a lot about making art that feels right for the game it's in.<br><br>
+        Always open to collabs, commissions, or just a good chat about games.
+      </p>
+      <div class="about-cards">
+        <div class="about-card">
+          <span class="about-card-label">Role</span>
+          <span class="about-card-value">Game Artist</span>
         </div>
-        <div class="info-row">
-          <span class="info-key">Role</span>
-          <span class="info-val">Game Artist</span>
+        <div class="about-card">
+          <span class="about-card-label">Status</span>
+          <span class="about-card-value">Open to work</span>
         </div>
-        <div class="info-row">
-          <span class="info-key">Availability</span>
-          <span class="info-val">Open to projects</span>
-        </div>
-        <div class="info-row">
-          <span class="info-key">Contact</span>
-          <span class="info-val">spraho@outlook.com</span>
+        <div class="about-card">
+          <span class="about-card-label">Contact</span>
+          <span class="about-card-value" style="font-size:0.82rem">spraho@outlook.com</span>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- PROJECTS -->
-  <div class="section-wrap" id="projects">
-    <div class="section-label"><span>Selected Work</span></div>
-    <div class="projects-grid">
-
-      <!-- To add an image: replace the placeholder div inside .card-thumb with:
-           <img src="images/your-image.jpg" alt="Project title" />  -->
-
-      <div class="project-card">
-        <div class="card-thumb">
-          <div class="placeholder">
-            <div class="placeholder-icon">+</div>
-            <span class="placeholder-text">Add image</span>
-          </div>
-          <!-- <img src="images/project1.jpg" alt="Project 1" /> -->
-        </div>
-        <div class="card-body">
-          <div class="card-num">01</div>
-          <div class="card-title">Project Title</div>
-          <p class="card-desc">Short description of the project.</p>
-        </div>
+  <div style="background: rgba(38,70,83,0.04); padding: 1px 0;">
+    <div class="section-wrap" id="projects">
+      <div class="section-header">
+        <span class="section-label">02 — Selected Work</span>
+        <div class="section-rule"></div>
       </div>
+      <h2 class="section-title">My work</h2>
+      <div class="projects-grid">
 
-      <div class="project-card">
-        <div class="card-thumb">
-          <div class="placeholder">
-            <div class="placeholder-icon">+</div>
-            <span class="placeholder-text">Add image</span>
+        <div class="project-card">
+          <div class="card-thumb">
+            <div class="placeholder">
+              <div class="placeholder-icon">+</div>
+              <span class="placeholder-text">Add image</span>
+            </div>
+            <!-- <img src="images/project1.jpg" alt="Project 1" /> -->
           </div>
-          <!-- <img src="images/project2.jpg" alt="Project 2" /> -->
-        </div>
-        <div class="card-body">
-          <div class="card-num">02</div>
-          <div class="card-title">Project Title</div>
-          <p class="card-desc">Short description of the project.</p>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="card-thumb">
-          <div class="placeholder">
-            <div class="placeholder-icon">+</div>
-            <span class="placeholder-text">Add image</span>
+          <div class="card-body">
+            <div class="card-num">No. 01</div>
+            <div class="card-title">Project Title</div>
+            <p class="card-desc">Short description of the project.</p>
           </div>
-          <!-- <img src="images/project3.jpg" alt="Project 3" /> -->
         </div>
-        <div class="card-body">
-          <div class="card-num">03</div>
-          <div class="card-title">Project Title</div>
-          <p class="card-desc">Short description of the project.</p>
-        </div>
-      </div>
 
-      <div class="project-card">
-        <div class="card-thumb">
-          <div class="placeholder">
-            <div class="placeholder-icon">+</div>
-            <span class="placeholder-text">Add image</span>
+        <div class="project-card">
+          <div class="card-thumb">
+            <div class="placeholder">
+              <div class="placeholder-icon">+</div>
+              <span class="placeholder-text">Add image</span>
+            </div>
+            <!-- <img src="images/project2.jpg" alt="Project 2" /> -->
           </div>
-          <!-- <img src="images/project4.jpg" alt="Project 4" /> -->
-        </div>
-        <div class="card-body">
-          <div class="card-num">04</div>
-          <div class="card-title">Project Title</div>
-          <p class="card-desc">Short description of the project.</p>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="card-thumb">
-          <div class="placeholder">
-            <div class="placeholder-icon">+</div>
-            <span class="placeholder-text">Add image</span>
+          <div class="card-body">
+            <div class="card-num">No. 02</div>
+            <div class="card-title">Project Title</div>
+            <p class="card-desc">Short description of the project.</p>
           </div>
-          <!-- <img src="images/project5.jpg" alt="Project 5" /> -->
         </div>
-        <div class="card-body">
-          <div class="card-num">05</div>
-          <div class="card-title">Project Title</div>
-          <p class="card-desc">Short description of the project.</p>
-        </div>
-      </div>
 
-      <div class="project-card">
-        <div class="card-thumb">
-          <div class="placeholder">
-            <div class="placeholder-icon">+</div>
-            <span class="placeholder-text">Add image</span>
+        <div class="project-card">
+          <div class="card-thumb">
+            <div class="placeholder">
+              <div class="placeholder-icon">+</div>
+              <span class="placeholder-text">Add image</span>
+            </div>
+            <!-- <img src="images/project3.jpg" alt="Project 3" /> -->
           </div>
-          <!-- <img src="images/project6.jpg" alt="Project 6" /> -->
-        </div>
-        <div class="card-body">
-          <div class="card-num">06</div>
-          <div class="card-title">Project Title</div>
-          <p class="card-desc">Short description of the project.</p>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="card-thumb">
-          <div class="placeholder">
-            <div class="placeholder-icon">+</div>
-            <span class="placeholder-text">Add image</span>
+          <div class="card-body">
+            <div class="card-num">No. 03</div>
+            <div class="card-title">Project Title</div>
+            <p class="card-desc">Short description of the project.</p>
           </div>
-          <!-- <img src="images/project7.jpg" alt="Project 7" /> -->
         </div>
-        <div class="card-body">
-          <div class="card-num">07</div>
-          <div class="card-title">Project Title</div>
-          <p class="card-desc">Short description of the project.</p>
-        </div>
-      </div>
 
-      <div class="project-card">
-        <div class="card-thumb">
-          <div class="placeholder">
-            <div class="placeholder-icon">+</div>
-            <span class="placeholder-text">Add image</span>
+        <div class="project-card">
+          <div class="card-thumb">
+            <div class="placeholder">
+              <div class="placeholder-icon">+</div>
+              <span class="placeholder-text">Add image</span>
+            </div>
+            <!-- <img src="images/project4.jpg" alt="Project 4" /> -->
           </div>
-          <!-- <img src="images/project8.jpg" alt="Project 8" /> -->
-        </div>
-        <div class="card-body">
-          <div class="card-num">08</div>
-          <div class="card-title">Project Title</div>
-          <p class="card-desc">Short description of the project.</p>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="card-thumb">
-          <div class="placeholder">
-            <div class="placeholder-icon">+</div>
-            <span class="placeholder-text">Add image</span>
+          <div class="card-body">
+            <div class="card-num">No. 04</div>
+            <div class="card-title">Project Title</div>
+            <p class="card-desc">Short description of the project.</p>
           </div>
-          <!-- <img src="images/project9.jpg" alt="Project 9" /> -->
         </div>
-        <div class="card-body">
-          <div class="card-num">09</div>
-          <div class="card-title">Project Title</div>
-          <p class="card-desc">Short description of the project.</p>
-        </div>
-      </div>
 
-      <div class="project-card">
-        <div class="card-thumb">
-          <div class="placeholder">
-            <div class="placeholder-icon">+</div>
-            <span class="placeholder-text">Add image</span>
+        <div class="project-card">
+          <div class="card-thumb">
+            <div class="placeholder">
+              <div class="placeholder-icon">+</div>
+              <span class="placeholder-text">Add image</span>
+            </div>
+            <!-- <img src="images/project5.jpg" alt="Project 5" /> -->
           </div>
-          <!-- <img src="images/project10.jpg" alt="Project 10" /> -->
+          <div class="card-body">
+            <div class="card-num">No. 05</div>
+            <div class="card-title">Project Title</div>
+            <p class="card-desc">Short description of the project.</p>
+          </div>
         </div>
-        <div class="card-body">
-          <div class="card-num">10</div>
-          <div class="card-title">Project Title</div>
-          <p class="card-desc">Short description of the project.</p>
-        </div>
-      </div>
 
+        <div class="project-card">
+          <div class="card-thumb">
+            <div class="placeholder">
+              <div class="placeholder-icon">+</div>
+              <span class="placeholder-text">Add image</span>
+            </div>
+            <!-- <img src="images/project6.jpg" alt="Project 6" /> -->
+          </div>
+          <div class="card-body">
+            <div class="card-num">No. 06</div>
+            <div class="card-title">Project Title</div>
+            <p class="card-desc">Short description of the project.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-thumb">
+            <div class="placeholder">
+              <div class="placeholder-icon">+</div>
+              <span class="placeholder-text">Add image</span>
+            </div>
+            <!-- <img src="images/project7.jpg" alt="Project 7" /> -->
+          </div>
+          <div class="card-body">
+            <div class="card-num">No. 07</div>
+            <div class="card-title">Project Title</div>
+            <p class="card-desc">Short description of the project.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-thumb">
+            <div class="placeholder">
+              <div class="placeholder-icon">+</div>
+              <span class="placeholder-text">Add image</span>
+            </div>
+            <!-- <img src="images/project8.jpg" alt="Project 8" /> -->
+          </div>
+          <div class="card-body">
+            <div class="card-num">No. 08</div>
+            <div class="card-title">Project Title</div>
+            <p class="card-desc">Short description of the project.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-thumb">
+            <div class="placeholder">
+              <div class="placeholder-icon">+</div>
+              <span class="placeholder-text">Add image</span>
+            </div>
+            <!-- <img src="images/project9.jpg" alt="Project 9" /> -->
+          </div>
+          <div class="card-body">
+            <div class="card-num">No. 09</div>
+            <div class="card-title">Project Title</div>
+            <p class="card-desc">Short description of the project.</p>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-thumb">
+            <div class="placeholder">
+              <div class="placeholder-icon">+</div>
+              <span class="placeholder-text">Add image</span>
+            </div>
+            <!-- <img src="images/project10.jpg" alt="Project 10" /> -->
+          </div>
+          <div class="card-body">
+            <div class="card-num">No. 10</div>
+            <div class="card-title">Project Title</div>
+            <p class="card-desc">Short description of the project.</p>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- CONTACT -->
   <div class="section-wrap" id="contact">
-    <div class="section-label"><span>Contact</span></div>
-    <div class="contact-wrap">
-      <h2 class="contact-heading">Let's make<br>something <em>great.</em></h2>
+    <div class="section-header">
+      <span class="section-label">03 — Contact</span>
+      <div class="section-rule"></div>
+    </div>
+    <div class="contact-inner">
+      <h2 class="contact-heading">Got a project<br>in mind?<br><em>Let's talk.</em></h2>
       <div class="contact-right">
-        <p class="contact-sub">Open for commissions, collaborations, and full-time opportunities. Don't hesitate to reach out.</p>
+        <p class="contact-sub">Open for commissions, collabs, and full-time opportunities. Drop me a message anytime!</p>
         <a class="contact-link" href="mailto:spraho@outlook.com">spraho@outlook.com</a>
       </div>
     </div>
   </div>
 
   <footer>
-    <span class="footer-name">Praho</span>
+    <div class="footer-logo">Pra<span>ho</span></div>
     <span class="footer-copy">© 2025 — All rights reserved</span>
   </footer>
 
