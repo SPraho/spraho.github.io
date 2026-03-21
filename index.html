@@ -557,6 +557,52 @@
     @media (max-width: 500px) {
       .projects-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(38,70,83,0.95);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active { display: flex; }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+      cursor: default;
+      animation: lbIn 0.25s ease;
+    }
+
+    @keyframes lbIn {
+      from { opacity: 0; transform: scale(0.93); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 1.5rem; right: 2rem;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(242,237,232,0.6);
+      cursor: pointer;
+      transition: color 0.2s;
+      z-index: 1000;
+    }
+
+    .lightbox-close:hover { color: var(--yellow); }
+
+    .card-thumb { cursor: zoom-in; }
   </style>
 </head>
 <body>
@@ -797,4 +843,51 @@
       <h2 class="contact-heading">Got a project<br>in mind?<br><em>Let's talk.</em></h2>
       <div class="contact-right">
         <p class="contact-sub">Open for commissions, collabs, and full-time opportunities. Drop me a message anytime!</p>
-        <a class="contact-link" href="/cdn-
+        mailto:spraho@outlook.com">spraho@outlook.com</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">Pra<span>ho</span></div>
+    <span class="footer-copy">&copy; 2025 &mdash; All rights reserved</span>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" id="lbClose">&times; Close</span>
+    <img id="lbImg" src="" alt="" />
+  </div>
+
+  <script>
+    const lightbox = document.getElementById("lightbox");
+    const lbImg    = document.getElementById("lbImg");
+    const lbClose  = document.getElementById("lbClose");
+
+    document.querySelectorAll(".card-thumb img").forEach(img => {
+      img.addEventListener("click", () => {
+        lbImg.src = img.src;
+        lbImg.alt = img.alt;
+        lightbox.classList.add("active");
+        document.body.style.overflow = "hidden";
+      });
+    });
+
+    lightbox.addEventListener("click", e => {
+      if (e.target !== lbImg) closeLb();
+    });
+
+    lbClose.addEventListener("click", closeLb);
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeLb();
+    });
+
+    function closeLb() {
+      lightbox.classList.remove("active");
+      document.body.style.overflow = "";
+      lbImg.src = "";
+    }
+  </script>
+</body>
+</html>
